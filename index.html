@@ -35,7 +35,10 @@
                 log(`pusher registered and subscribed!`)
                 console.log('Successfully registered and subscribed!');
             })
-            .catch(console.error);
+            .catch(err => {
+                log(`pusher error ${err}`)
+                console.error('Error registering the service worker: ', err);
+            });
     })
 
     // register ServiceWorker, remember to use absolute path!
