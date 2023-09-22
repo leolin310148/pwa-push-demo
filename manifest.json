@@ -1,0 +1,9 @@
+{
+  "short_name": "PPD",
+  "name": "PWA Push Demo!",
+  "icons": [],
+  "start_url": "/pwa-push-demo/index.html",
+  "background_color": "#000",
+  "theme_color": "#536878",
+  "display": "standalone"
+}
