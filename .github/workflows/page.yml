@@ -11,9 +11,7 @@ jobs:
     steps:
       - name: build
         run: |
-          mkdir -p dist
-          cp index.html dist/
-          cp service-worker.js dist/
+          sh build.sh
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
