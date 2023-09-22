@@ -17,7 +17,7 @@
 <div id="message">
 
 </div>
-
+<script src="/pwa-push-demo/web-push.js" type="text/javascript"></script>
 <script>
     const container = document.querySelector("#message");
     function log(message) {
@@ -45,21 +45,21 @@
         });
 
 
-        const beamsClient = new PusherPushNotifications.Client({
-            instanceId: 'f15795fb-d044-47b0-9e99-76b52a9faee6',
-            serviceWorkerRegistration: serviceWorkerRegistration,
-        });
-
-        beamsClient.start()
-            .then(() => beamsClient.addDeviceInterest('hello'))
-            .then(() => {
-                log(`pusher registered and subscribed!`)
-                console.log('Successfully registered and subscribed!');
-            })
-            .catch(err => {
-                log(`pusher error ${err}`)
-                console.error('Error registering the service worker: ', err);
-            });
+        // const beamsClient = new PusherPushNotifications.Client({
+        //     instanceId: 'f15795fb-d044-47b0-9e99-76b52a9faee6',
+        //     serviceWorkerRegistration: serviceWorkerRegistration,
+        // });
+        //
+        // beamsClient.start()
+        //     .then(() => beamsClient.addDeviceInterest('hello'))
+        //     .then(() => {
+        //         log(`pusher registered and subscribed!`)
+        //         console.log('Successfully registered and subscribed!');
+        //     })
+        //     .catch(err => {
+        //         log(`pusher error ${err}`)
+        //         console.error('Error registering the service worker: ', err);
+        //     });
     })
 
     // register ServiceWorker, remember to use absolute path!
@@ -70,6 +70,5 @@
 
 
 </script>
-<script src="/pwa-push-demo/web-push.js"></script>
 </body>
 </html>
