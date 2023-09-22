@@ -7,13 +7,14 @@ const config = {
 };
 
 window.navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
-    console.log(`service worker ready `)
     const topic = 'news'
+    const subscribeOption = {
+        userVisibleOnly: true,
+        applicationServerKey: urlB64ToUint8Array(config.pushKey),
+    };
+    console.log(`service worker ready subscribeOption`, subscribeOption)
     serviceWorkerRegistration.pushManager
-        .subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: urlB64ToUint8Array(config.pushKey),
-        })
+        .subscribe(subscribeOption)
         .then(subscription => {
             console.log(`subscription`, subscription);
             fetch(config.appSyncUrl, {
