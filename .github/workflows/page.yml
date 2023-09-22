@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: build
         run: |
+          pwd
+          ls -al
           sh build.sh
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
