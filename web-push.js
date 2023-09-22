@@ -5,9 +5,10 @@ const config = {
         "https://axd7bfjqezhupnepjttv5ylmo4.appsync-api.ap-northeast-1.amazonaws.com/graphql",
     appSyncApiKey: "da2-tbjj4nm6njghzekqcatk3yw7wm",
 };
-async function subscribe(topic) {
-    swReg = await navigator.serviceWorker.register("/pwa-push-demo/service-worker.js");
-    const subscription = await swReg.pushManager.subscribe({
+
+window.navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
+    const topic = 'news'
+    const subscription = serviceWorkerRegistration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlB64ToUint8Array(config.pushKey),
     });
@@ -17,8 +18,13 @@ async function subscribe(topic) {
         headers: { "x-api-key": config.appSyncApiKey },
         body: JSON.stringify({ query: `mutation($topic: String, $subscription: String) {subscribe(topic: $topic, subscription: $subscription)}`,
             variables: { topic, subscription: JSON.stringify(subscription) } })
+    }).then(() => {
+        console.log("Subscribed to " + topic);
+    }).catch((e) => {
+        console.error("Error subscribing to " + topic, e);
     });
-}
+});
+
 function urlB64ToUint8Array(base64String) {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
     const base64 = (base64String + padding)
@@ -33,4 +39,3 @@ function urlB64ToUint8Array(base64String) {
     }
     return outputArray;
 }
-subscribe("news");
