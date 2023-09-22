@@ -10,8 +10,19 @@
 </head>
 <body>
 
+<h4>pwd push demo</h4>
+<div id="message">
+
+</div>
+
 <script>
+    const container = document.querySelector("#message");
+    function log(message) {
+        container.appendChild(document.createTextNode(message));
+        container.appendChild(document.createElement("br"));
+    }
     window.navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
+        log(`service worker ready `)
         console.log(`service worker ready `, serviceWorkerRegistration)
         const beamsClient = new PusherPushNotifications.Client({
             instanceId: 'f15795fb-d044-47b0-9e99-76b52a9faee6',
@@ -20,7 +31,10 @@
 
         beamsClient.start()
             .then(() => beamsClient.addDeviceInterest('hello'))
-            .then(() => console.log('Successfully registered and subscribed!'))
+            .then(() => {
+                log(`pusher registered and subscribed!`)
+                console.log('Successfully registered and subscribed!');
+            })
             .catch(console.error);
     })
 
