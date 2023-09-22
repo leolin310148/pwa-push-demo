@@ -7,22 +7,37 @@ const config = {
 };
 
 window.navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
+    console.log(`service worker ready `)
     const topic = 'news'
-    const subscription = serviceWorkerRegistration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlB64ToUint8Array(config.pushKey),
-    });
+    serviceWorkerRegistration.pushManager
+        .subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlB64ToUint8Array(config.pushKey),
+        })
+        .then(subscription => {
+            console.log(`subscription`, subscription);
+            fetch(config.appSyncUrl, {
+                method: "POST",
+                headers: {"x-api-key": config.appSyncApiKey},
+                body: JSON.stringify({
+                    query: `mutation($topic: String, $subscription: String) {subscribe(topic: $topic, subscription: $subscription)}`,
+                    variables: {topic, subscription: JSON.stringify(subscription)}
+                })
+            }).then(() => {
+                console.log("Subscribed to " + topic);
+            }).catch((e) => {
+                console.error("Error subscribing to " + topic, e);
+            });
 
-    fetch(config.appSyncUrl, {
-        method: "POST",
-        headers: { "x-api-key": config.appSyncApiKey },
-        body: JSON.stringify({ query: `mutation($topic: String, $subscription: String) {subscribe(topic: $topic, subscription: $subscription)}`,
-            variables: { topic, subscription: JSON.stringify(subscription) } })
-    }).then(() => {
-        console.log("Subscribed to " + topic);
-    }).catch((e) => {
-        console.error("Error subscribing to " + topic, e);
-    });
+        })
+        .catch(e => {
+            console.error("Error subscribing to " + topic, e);
+            serviceWorkerRegistration.pushManager.getSubscription().then(subscription => {
+                subscription.unsubscribe().then(() => {
+                    console.log("Unsubscribed");
+                });
+            });
+        })
 });
 
 function urlB64ToUint8Array(base64String) {
