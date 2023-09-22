@@ -10,14 +10,20 @@
 <body>
 
 <script>
-    const beamsClient = new PusherPushNotifications.Client({
-        instanceId: 'f15795fb-d044-47b0-9e99-76b52a9faee6',
-    });
+    window.navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
+        console.log(`service worker ready `, serviceWorkerRegistration)
+        const beamsClient = new PusherPushNotifications.Client({
+            instanceId: 'f15795fb-d044-47b0-9e99-76b52a9faee6',
+            serviceWorkerRegistration: serviceWorkerRegistration,
+        });
 
-    beamsClient.start()
-        .then(() => beamsClient.addDeviceInterest('hello'))
-        .then(() => console.log('Successfully registered and subscribed!'))
-        .catch(console.error);
+        beamsClient.start()
+            .then(() => beamsClient.addDeviceInterest('hello'))
+            .then(() => console.log('Successfully registered and subscribed!'))
+            .catch(console.error);
+    })
+
+
 </script>
 </body>
 </html>
