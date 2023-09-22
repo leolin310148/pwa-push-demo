@@ -10,7 +10,10 @@
 </head>
 <body>
 
-<h4>pwd push demo</h4>
+<h4>PWA push demo</h4>
+
+<button id="client-notification">client notification</button>
+
 <div id="message">
 
 </div>
@@ -24,6 +27,24 @@
     window.navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
         log(`service worker ready `)
         console.log(`service worker ready `, serviceWorkerRegistration)
+
+        const button = document.getElementById("client-notification");
+        button.addEventListener("click", async () => {
+            // Triggers popup to request access to send notifications
+            const result = await window.Notification.requestPermission();
+
+            // If the user rejects the permission result will be "denied"
+            if (result === "granted") {
+                // You must use the service worker notification to show the notification
+                // Using new Notification("Hello World", { body: "My first notification on iOS"}) does not work on iOS
+                // despite working on other platforms
+                await serviceWorkerRegistration.showNotification("Hello World", {
+                    body: "My first notification on iOS",
+                });
+            }
+        });
+
+
         const beamsClient = new PusherPushNotifications.Client({
             instanceId: 'f15795fb-d044-47b0-9e99-76b52a9faee6',
             serviceWorkerRegistration: serviceWorkerRegistration,
@@ -45,6 +66,9 @@
     if (navigator.serviceWorker) {
         navigator.serviceWorker.register('/pwa-push-demo/service-worker.js', {scope: '/pwa-push-demo/'})
     }
+
+
+
 </script>
 </body>
 </html>
