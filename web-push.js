@@ -27,12 +27,12 @@ window.navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
             }).then(() => {
                 log("Subscribed to " + topic);
             }).catch((e) => {
-                console.error("Error subscribing to " + topic, e);
+                log("Error subscribing to " + topic, e);
             });
 
         })
         .catch(e => {
-            console.error("Error subscribing to " + topic, e);
+            log("Error subscribing to " + topic, e);
             serviceWorkerRegistration.pushManager.getSubscription().then(subscription => {
                 subscription.unsubscribe().then(() => {
                     log("Unsubscribed");
