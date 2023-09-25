@@ -12,11 +12,11 @@ window.navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
         userVisibleOnly: true,
         applicationServerKey: urlB64ToUint8Array(config.pushKey),
     };
-    console.log(`service worker ready subscribeOption`, subscribeOption)
+    log(`service worker ready subscribeOption`, subscribeOption)
     serviceWorkerRegistration.pushManager
         .subscribe(subscribeOption)
         .then(subscription => {
-            console.log(`subscription`, subscription);
+            log(`subscription`, subscription);
             fetch(config.appSyncUrl, {
                 method: "POST",
                 headers: {"x-api-key": config.appSyncApiKey},
@@ -25,7 +25,7 @@ window.navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
                     variables: {topic, subscription: JSON.stringify(subscription)}
                 })
             }).then(() => {
-                console.log("Subscribed to " + topic);
+                log("Subscribed to " + topic);
             }).catch((e) => {
                 console.error("Error subscribing to " + topic, e);
             });
@@ -35,7 +35,7 @@ window.navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
             console.error("Error subscribing to " + topic, e);
             serviceWorkerRegistration.pushManager.getSubscription().then(subscription => {
                 subscription.unsubscribe().then(() => {
-                    console.log("Unsubscribed");
+                    log("Unsubscribed");
                 });
             });
         })
